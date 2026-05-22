@@ -1,0 +1,35 @@
+// Aqui estão nomes REALISTAS (estilo paper):
+// Dual-Path Spatial Pooling Block
+// Parallel Spatial Feature Aggregation
+// Hybrid Spatial Decomposition Module
+// Quadrant-Aware Pooling Block
+
+digraph ParallelGroupsTB {
+    rankdir=TB;
+    compound=true;
+
+    node [shape=box, fontname="Helvetica"];
+
+    Start [shape=circle];
+    End   [shape=circle];
+
+    PoolingBy2 [label="Pooling By 2"];
+    SplitIn4Sectors [ shape=trapezium, label="Quadrant\nSplit 2×2"];
+    Merge [shape=invtrapezium, label="Merge"];
+
+    // entradas
+    Start -> SplitIn4Sectors [label="B×N×C×H×W"];
+    Start -> PoolingBy2      [label="B×N×C×H×W"];
+
+    // split (mantém sua ideia, mas sem repetição visual)
+    SplitIn4Sectors -> Merge;
+    SplitIn4Sectors -> Merge;
+    SplitIn4Sectors -> Merge;
+    SplitIn4Sectors -> Merge [label="B×N×C×H/2×W/2"];
+
+    // pooling
+    PoolingBy2 -> Merge [label="B×N×C×H/2×W/2"];
+
+    // saída
+    Merge -> End [label="B×5N×C×H/2×W×2"];
+}
